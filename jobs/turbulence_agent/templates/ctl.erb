@@ -11,8 +11,8 @@ case $1 in
     mkdir -p $RUN_DIR $LOG_DIR
     chown -R vcap:vcap $RUN_DIR $LOG_DIR
 
-    # todo hostname is not that good
-    agent_id=$(hostname)
+    # TODO: Do this with jq
+    agent_id=$(cat /var/vcap/bosh/settings.json | json_pp | grep agent_id  | sed -r 's|\s+".*" : "(.*)".*|\1|')
     sed -i "s:_agent_id_:${agent_id}:g" $CONF_DIR/config.json
 
     echo $$ > $PIDFILE
